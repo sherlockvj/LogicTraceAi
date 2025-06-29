@@ -2,7 +2,7 @@
 
 An intelligent developer tool that takes your source code as input, analyzes its logic, and generates detailed explanations along with visual flowcharts or sequence diagrams. Designed for developers, learners, and educators, this app helps break down complex logic into understandable steps — all powered by AI.
 
-## ✨ Features
+## Features
 
 - Accepts code snippets in multiple languages (e.g., JavaScript, Python)
 - AI-powered explanation of the code logic in natural language
@@ -12,7 +12,7 @@ An intelligent developer tool that takes your source code as input, analyzes its
 - Option to export or share results
 - History of explained snippets (optional login)
 
-## 🧩 Tech Stack
+## Tech Stack
 
 **Frontend**
 - React.js
@@ -29,7 +29,7 @@ An intelligent developer tool that takes your source code as input, analyzes its
 **Database**
 - MongoDB
 
-## 🧠 How It Works
+## How It Works
 
 - User submits code via a code editor interface  
 - Backend sends code to OpenAI (or other LLM) with structured prompts  
@@ -38,7 +38,7 @@ An intelligent developer tool that takes your source code as input, analyzes its
   - A textual diagram (e.g., Mermaid or Graphviz)  
 - Frontend renders the explanation and diagram for the user  
 
-## 📌 Roadmap
+## Roadmap
 
 - [ ] Support for multiple languages (Python, JS, Java)  
 - [ ] Export flowcharts as PNG/SVG  
