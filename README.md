@@ -45,3 +45,16 @@ An intelligent developer tool that takes your source code as input, analyzes its
 - [ ] Add text-to-speech for explanations  
 - [ ] Generate video walkthroughs (via Remotion)  
 - [ ] Auth + user history dashboard  
+
+
+## 🗺️ MVP Milestone Plan
+
+| Step | Feature                          |
+|------|----------------------------------|
+| ✅ 1 | Take user input (React editor)   |
+| ✅ 2 | API to receive code              |
+| ✅ 3 | AI Explanation (OpenAI API)      |
+| ✅ 4 | Flowchart with Mermaid           |
+| ✅ 5 | Store history (MongoDB)          |
+| 🔜 6 | UI polish, export/share options |
+| 🔜 7 | Video generation (Remotion, TTS) |
