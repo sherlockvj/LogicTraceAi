@@ -7,7 +7,7 @@ const buildOpenAIUrl = () =>
 
 export const getExplanation = async (code, language) => {
     try {
-        const prompt = getPromptMessages("explainCode", { code, language });
+        const prompt = getPromptMessages("EXPLAINCODE", { code, language });
         const response = await axios.post(buildOpenAIUrl(),
             {
                 messages: [prompt.system, prompt.user],
@@ -38,5 +38,39 @@ export const getExplanation = async (code, language) => {
         console.error("Unexpected error while getting explanation:", e);
         throw new ApiError("Failed to get explanation from OpenAI", 500);
     }
+}
 
+export const getMermaidFlowChartCode = async (code, language) => {
+    try {
+        const prompt = getPromptMessages("GETFLOWCHARTCODE", { code, language });
+        const response = await axios.post(buildOpenAIUrl(),
+            {
+                messages: [prompt.system, prompt.user],
+                temperature: 0.1,
+                max_tokens: 6000,
+            },
+            {
+                headers: {
+                    "Content-Type": "application/json",
+                    "api-key": process.env.AZURE_OPENAI_KEY,
+                },
+            });
+
+        if (response.status >= 200 && response.status < 300) {
+            return response.data;
+        } else {
+            console.error("OpenAI API error:", response.status, response.data);
+            throw new ApiError(
+                `OpenAI API returned status ${response.status}`,
+                response.status
+            );
+        }
+
+    } catch (e) {
+        if (e instanceof ApiError) {
+            throw e;
+        }
+        console.error("Unexpected error while getting mermaid.js code outlines:", e);
+        throw new ApiError("Failed to get mermaid.js outline from OpenAI", 500);
+    }
 }
