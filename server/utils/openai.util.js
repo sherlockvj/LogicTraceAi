@@ -28,45 +28,44 @@ ${code}
     GETFLOWCHARTCODE: {
         systemMessage: {
             role: "system",
-            content: `You are an expert in code analysis and flowchart generation. Given a piece of code, your job is to analyze its structure and return structured data in JSON format that can be used to create a Mermaid.js flowchart.
+            content: `You are an expert in code analysis and flowchart generation. Your task is to analyze its control flow (including function calls, conditions, loops, and returns), and generate a Mermaid flowchart that represents its logic.
 
-Your response must:
-- Identify Start and End points.
-- Detect functions and function calls.
-- Identify conditionals (if, else, switch).
-- Identify loops (for, while).
-- Include return statements.
+Return it in JSON format like:
+{
+  "code": "graph TD\\nstart[\\"Start\\"] --> ..."
+}
 
-Return only a JSON object containing:
-- 'nodes': a list of labeled flowchart blocks.
-- 'connections': a list of links between blocks.
+Rules:
+- Use graph TD
+- Use valid node IDs and labels like: node_id["Label"]
+- Use \\n for line breaks
+- Use end_node not end
+- Do NOT add any explanation or text, only the JSON
 
-Do not include Mermaid.js code, text explanations, or extra formatting. Only valid, parsable JSON should be returned.`
+Do not include text explanations, or extra formatting. Only valid, parsable JSON should be returned.`
         },
         userMessage: ({ code, language }) => ({
             role: "user",
-            content: `Analyze the following ${language} code and return its flowchart structure in JSON format.
+            content: `Analyze the following ${language} code and return its mermaid code in JSON format.
 
 Follow this structure strictly:
-1. Identify flowchart elements as "nodes" (e.g., start, function, condition, return, end).
-2. Connect them using "connections" with directional flow.
-3. Label conditions (like Yes/No) clearly.
-4. Only include used parts of the code. Ignore unused declarations.
+- Use graph TD
+- Use valid node IDs and labels like: node_id["Label"]
+- Use \\n for line breaks
+- Use end_node not end
+- Do NOT add any explanation or text, only the JSON
 
 Output format:
 \`\`\`json
 {
-  "nodes": [ ... ],
-  "connections": [ ... ]
+  "code": "graph TD\\nstart[\\"Start\\"] --> ..."
 }
+
+Here is the program:
 \`\`\`
-
-Do NOT include code, explanations, or any other text.
-
-Here is the code:
-\`\`\`${language}
 ${code}
-\`\`\``
+\`\`\`
+`
         })
     }
 }

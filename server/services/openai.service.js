@@ -22,7 +22,7 @@ export const getExplanation = async (code, language) => {
             });
 
         if (response.status >= 200 && response.status < 300) {
-            return response.data;
+            return response.data.choices[0].message.content;
         } else {
             console.error("OpenAI API error:", response.status, response.data);
             throw new ApiError(
@@ -40,7 +40,7 @@ export const getExplanation = async (code, language) => {
     }
 }
 
-export const getMermaidFlowChartCode = async (code, language) => {
+export const getMermaidFlowChartOutline = async (code, language) => {
     try {
         const prompt = getPromptMessages("GETFLOWCHARTCODE", { code, language });
         const response = await axios.post(buildOpenAIUrl(),
@@ -57,7 +57,8 @@ export const getMermaidFlowChartCode = async (code, language) => {
             });
 
         if (response.status >= 200 && response.status < 300) {
-            return response.data;
+            console.log("OpenAi Response::\n" + response.data.choices[0].message.content);
+            return extractJson(response.data.choices[0].message.content);
         } else {
             console.error("OpenAI API error:", response.status, response.data);
             throw new ApiError(
@@ -74,3 +75,9 @@ export const getMermaidFlowChartCode = async (code, language) => {
         throw new ApiError("Failed to get mermaid.js outline from OpenAI", 500);
     }
 }
+
+const extractJson = (markdown) => {
+    const match = markdown.match(/```json([\s\S]*?)```/);
+    if (!match) throw new Error("Invalid JSON format in OpenAI response");
+    return JSON.parse(match[1].trim());
+};
