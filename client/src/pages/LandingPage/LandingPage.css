@@ -76,7 +76,7 @@ body {
 }
 
 
-.btn {
+.hero-buttons .btn {
     padding: 12px 24px;
     border: none;
     font-weight: bold;
@@ -86,12 +86,12 @@ body {
     margin-right: 12px;
 }
 
-.btn.primary {
+.hero-buttons .btn.primary {
     background-color: #00ffe7;
     color: #000;
 }
 
-.btn.secondary {
+.hero-buttons .btn.secondary {
     background-color: transparent;
     border: 2px solid #00ffe7;
     color: #00ffe7;

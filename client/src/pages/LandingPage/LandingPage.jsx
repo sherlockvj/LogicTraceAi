@@ -14,7 +14,7 @@ export default function LandingPage() {
                         Instantly understand your code — visually and logically.
                     </p>
                     <div className="hero-buttons">
-                        <button className="btn primary">Try Demo</button>
+                        <a href="/playground" style={{"textDecoration": "none"}} className="btn primary">Try Demo</a>
                         <a href="#how-it-works" style={{"textDecoration": "none"}} className="btn secondary">How It Works</a>
                     </div>
                 </div>

@@ -20,7 +20,7 @@ export default function Navbar() {
 
         <ul className={`nav-links ${menuOpen ? "show" : ""}`}>
           <li><a href="/">Home</a></li>
-          <li><a href="#how-it-works">How It Works</a></li>
+          <li><a href="/#how-it-works">How It Works</a></li>
           <li><a href="/playground">Playground</a></li>
           <li><a href="/login">Login</a></li>
         </ul>
