@@ -4,6 +4,8 @@ import ReactMarkdown from "react-markdown";
 
 import "./PlaygroundPage.css";
 import api from "../../api/api";
+import { savedSnippets } from "../../util/sampleSnippets";
+import { explainBlockLoadingMessages, flowchartBlockLoadingMessages } from "../../util/loadingMessages";
 
 export default function Playground() {
     const [code, setCode] = useState("");
@@ -17,68 +19,15 @@ export default function Playground() {
     const [explanationIndex, setExplanationIndex] = useState(0);
     const [flowchartIndex, setFlowchartIndex] = useState(0);
 
+    const [selectedSample, setSelectedSample] = useState(null);
+
     const mermaidRef = useRef(null);
 
-    const sampleSnippets = [
-        {
-            title: "Dijkstra's Algorithm (Python)",
-            language: "python",
-            code: `import heapq
+    const sampleSnippets = savedSnippets;
+    const explanationLoadingMessages = explainBlockLoadingMessages;
+    const flowchartLoadingMessages = flowchartBlockLoadingMessages;
 
-def dijkstra(graph, start):
-    distances = {node: float('inf') for node in graph}
-    distances[start] = 0
-    pq = [(0, start)]
-
-    while pq:
-        current_distance, current_node = heapq.heappop(pq)
-
-        if current_distance > distances[current_node]:
-            continue
-
-        for neighbor, weight in graph[current_node].items():
-            distance = current_distance + weight
-            if distance < distances[neighbor]:
-                distances[neighbor] = distance
-                heapq.heappush(pq, (distance, neighbor))
-
-    return distances`
-        },
-        {
-            title: "Binary Search (JavaScript)",
-            language: "javascript",
-            code: `function binarySearch(arr, target) {
-    let left = 0, right = arr.length - 1;
-
-    while (left <= right) {
-        let mid = Math.floor((left + right) / 2);
-        if (arr[mid] === target) return mid;
-        else if (arr[mid] < target) left = mid + 1;
-        else right = mid - 1;
-    }
-
-    return -1;
-}`
-        }
-    ];
-
-    const explanationLoadingMessages = [
-        "Thinking deeply about your code...",
-        "Reading line by line like a code monk...",
-        "Searching for insights buried in logic...",
-        "Sending thoughts to the AI mothership...",
-        "Exploring functions and their meaning...",
-        "Untangling logic threads with elegance...",
-    ];
-
-    const flowchartLoadingMessages = [
-        "Drawing arrows and nodes...",
-        "Connecting the logic DNA...",
-        "Building your flowblock empire...",
-        "Measuring loops and conditions...",
-        "Translating control flow to visuals...",
-        "Mapping logic links with precision...",
-    ];
+    const delay = (ms) => new Promise((res) => setTimeout(res, ms));
 
     useEffect(() => {
         if (mermaidCode && mermaidRef.current) {
@@ -97,6 +46,15 @@ def dijkstra(graph, start):
             } catch (err) {
                 console.error("Mermaid rendering error:", err);
                 mermaidRef.current.innerHTML = "⚠️ Invalid Mermaid code.";
+            }
+        }
+
+        if (selectedSample) {
+            const isSameCode = selectedSample.code.trim() === code.trim();
+            const isSameLang = selectedSample.language === language;
+
+            if (!isSameCode || !isSameLang) {
+                setSelectedSample(null);
             }
         }
 
@@ -119,13 +77,30 @@ def dijkstra(graph, start):
             clearInterval(explainInterval);
             clearInterval(flowchartInterval);
         };
-    }, [mermaidCode, isLoading]);
+    }, [mermaidCode, isLoading, code, language]);
 
     const handleExplain = async () => {
         if (!code.trim()) return;
+
         setIsLoading(true);
         setIsExplainBlockLoading(true);
         setExplanation("🧠 Generating explanation... sit tight while we decode the code!");
+
+        const isSampleUnchanged =
+            selectedSample &&
+            selectedSample.code.trim() === code.trim() &&
+            selectedSample.language === language &&
+            selectedSample.explanation;
+
+        if (isSampleUnchanged) {
+            await delay(3000);
+            setExplanation(selectedSample.explanation);
+            setIsLoading(false);
+            setIsExplainBlockLoading(false);
+            return;
+        }
+
+
         try {
             const res = await api.post("/explain/explain-code", { code, language });
             setExplanation(res.data.message);
@@ -140,12 +115,28 @@ def dijkstra(graph, start):
 
     const handleGenerateFlowchart = async () => {
         if (!code.trim()) return;
+
         setIsLoading(true);
         setIsFlowchartBlockLoading(true);
         setMermaidCode(`
 graph TD
 loading["⏳ Crafting your diagram... compiling logic into lines & arrows..."]
 `);
+
+        const isSampleUnchanged =
+            selectedSample &&
+            selectedSample.code.trim() === code.trim() &&
+            selectedSample.language === language &&
+            selectedSample.mermaidCode;
+
+        if (isSampleUnchanged) {
+            await delay(3000);
+            setMermaidCode(selectedSample.mermaidCode);
+            setIsLoading(false);
+            setIsFlowchartBlockLoading(false);
+            return;
+        }
+
         try {
             const res = await api.post("/explain/generate-flowchart", { code, language });
             setMermaidCode(res.data.mermaidCode);
@@ -175,6 +166,7 @@ loading["⏳ Crafting your diagram... compiling logic into lines & arrows..."]
                                 onClick={() => {
                                     setCode(snippet.code);
                                     setLanguage(snippet.language);
+                                    setSelectedSample(snippet);
                                 }}
                             >
                                 Try This

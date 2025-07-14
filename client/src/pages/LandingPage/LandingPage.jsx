@@ -1,7 +1,10 @@
 import React from "react";
 import "./LandingPage.css";
+import { useNavigate } from "react-router-dom";
 
 export default function LandingPage() {
+    const navigate = useNavigate();
+
     return (
         <div className="landing-container">
             {/* Hero Section */}
@@ -14,8 +17,8 @@ export default function LandingPage() {
                         Instantly understand your code — visually and logically.
                     </p>
                     <div className="hero-buttons">
-                        <a href="/playground" style={{"textDecoration": "none"}} className="btn primary">Try Demo</a>
-                        <a href="#how-it-works" style={{"textDecoration": "none"}} className="btn secondary">How It Works</a>
+                        <button className="btn primary" onClick={() => navigate("/playground")}>Try Demo</button>
+                        <a href="#how-it-works" style={{ "textDecoration": "none" }} className="btn secondary">How It Works</a>
                     </div>
                 </div>
                 <div className="hero-preview">
@@ -56,7 +59,7 @@ export default function LandingPage() {
             {/* Call to Action */}
             <section className="cta">
                 <h2>Ready to explore your code?</h2>
-                <button className="btn primary">Launch Playground</button>
+                <button className="btn primary" onClick={() => navigate("/playground")}>Launch Playground</button>
             </section>
 
             {/* Footer */}
