@@ -81,7 +81,6 @@ export default function Playground() {
 
     const handleExplain = async () => {
         if (!code.trim()) return;
-
         setIsLoading(true);
         setIsExplainBlockLoading(true);
         setExplanation("🧠 Generating explanation... sit tight while we decode the code!");
@@ -115,7 +114,6 @@ export default function Playground() {
 
     const handleGenerateFlowchart = async () => {
         if (!code.trim()) return;
-
         setIsLoading(true);
         setIsFlowchartBlockLoading(true);
         setMermaidCode(`
