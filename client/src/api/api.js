@@ -2,7 +2,7 @@
 import axios from "axios";
 
 const api = axios.create({
-    baseURL: "https://logictraceai.onrender.com"
+    baseURL: "https://logictraceai.onrender.com/api"
 });
 
 // Interceptor for future auth
